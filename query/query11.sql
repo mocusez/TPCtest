@@ -1,32 +1,28 @@
 select
-	c_custkey,
-	c_name,
-	sum(l_extendedprice * (1 - l_discount)) as revenue,
-	c_acctbal,
-	n_name,
-	c_address,
-	c_phone,
-	c_comment
+	ps_partkey,
+	sum(ps_supplycost * ps_availqty) as value
 from
-	customer,
-	orders,
-	lineitem,
+	partsupp,
+	supplier,
 	nation
 where
-	c_custkey = o_custkey
-	and l_orderkey = o_orderkey
-	and o_orderdate >= date '1994-05-01'
-	and o_orderdate < date '1994-05-01' + interval '3' month
-	and l_returnflag = 'R'
-	and c_nationkey = n_nationkey
+	ps_suppkey = s_suppkey
+	and s_nationkey = n_nationkey
+	and n_name = 'SAUDI ARABIA'
 group by
-	c_custkey,
-	c_name,
-	c_acctbal,
-	c_phone,
-	n_name,
-	c_address,
-	c_comment
+	ps_partkey having
+		sum(ps_supplycost * ps_availqty) > (
+			select
+				sum(ps_supplycost * ps_availqty) * 0.0001000000
+			from
+				partsupp,
+				supplier,
+				nation
+			where
+				ps_suppkey = s_suppkey
+				and s_nationkey = n_nationkey
+				and n_name = 'SAUDI ARABIA'
+		)
 order by
-	revenue desc;
-where rownum <= 20;;
+	value desc;
+where rownum <= -1;

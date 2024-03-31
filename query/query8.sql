@@ -1,40 +1,38 @@
 select
-	supp_nation,
-	cust_nation,
-	l_year,
-	sum(volume) as revenue
+	o_year,
+	sum(case
+		when nation = 'IRAQ' then volume
+		else 0
+	end) / sum(volume) as mkt_share
 from
 	(
 		select
-			n1.n_name as supp_nation,
-			n2.n_name as cust_nation,
-			extract(year from l_shipdate) as l_year,
-			l_extendedprice * (1 - l_discount) as volume
+			extract(year from o_orderdate) as o_year,
+			l_extendedprice * (1 - l_discount) as volume,
+			n2.n_name as nation
 		from
+			part,
 			supplier,
 			lineitem,
 			orders,
 			customer,
 			nation n1,
-			nation n2
+			nation n2,
+			region
 		where
-			s_suppkey = l_suppkey
-			and o_orderkey = l_orderkey
-			and c_custkey = o_custkey
-			and s_nationkey = n1.n_nationkey
-			and c_nationkey = n2.n_nationkey
-			and (
-				(n1.n_name = 'ARGENTINA' and n2.n_name = 'IRAQ')
-				or (n1.n_name = 'IRAQ' and n2.n_name = 'ARGENTINA')
-			)
-			and l_shipdate between date '1995-01-01' and date '1996-12-31'
-	) as shipping
+			p_partkey = l_partkey
+			and s_suppkey = l_suppkey
+			and l_orderkey = o_orderkey
+			and o_custkey = c_custkey
+			and c_nationkey = n1.n_nationkey
+			and n1.n_regionkey = r_regionkey
+			and r_name = 'MIDDLE EAST'
+			and s_nationkey = n2.n_nationkey
+			and o_orderdate between date '1995-01-01' and date '1996-12-31'
+			and p_type = 'SMALL PLATED TIN'
+	) as all_nations
 group by
-	supp_nation,
-	cust_nation,
-	l_year
+	o_year
 order by
-	supp_nation,
-	cust_nation,
-	l_year;
-where rownum <= -1;;
+	o_year;
+where rownum <= -1;

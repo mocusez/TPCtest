@@ -1,44 +1,23 @@
 select
-	s_acctbal,
-	s_name,
-	n_name,
-	p_partkey,
-	p_mfgr,
-	s_address,
-	s_phone,
-	s_comment
+	l_orderkey,
+	sum(l_extendedprice * (1 - l_discount)) as revenue,
+	o_orderdate,
+	o_shippriority
 from
-	part,
-	supplier,
-	partsupp,
-	nation,
-	region
+	customer,
+	orders,
+	lineitem
 where
-	p_partkey = ps_partkey
-	and s_suppkey = ps_suppkey
-	and p_size = 43
-	and p_type like '%COPPER'
-	and s_nationkey = n_nationkey
-	and n_regionkey = r_regionkey
-	and r_name = 'ASIA'
-	and ps_supplycost = (
-		select
-			min(ps_supplycost)
-		from
-			partsupp,
-			supplier,
-			nation,
-			region
-		where
-			p_partkey = ps_partkey
-			and s_suppkey = ps_suppkey
-			and s_nationkey = n_nationkey
-			and n_regionkey = r_regionkey
-			and r_name = 'ASIA'
-	)
+	c_mktsegment = 'AUTOMOBILE'
+	and c_custkey = o_custkey
+	and l_orderkey = o_orderkey
+	and o_orderdate < date '1995-03-14'
+	and l_shipdate > date '1995-03-14'
+group by
+	l_orderkey,
+	o_orderdate,
+	o_shippriority
 order by
-	s_acctbal desc,
-	n_name,
-	s_name,
-	p_partkey;
-where rownum <= 100;;
+	revenue desc,
+	o_orderdate;
+where rownum <= 10;

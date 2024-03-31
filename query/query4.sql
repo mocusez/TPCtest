@@ -1,23 +1,22 @@
 select
-	l_orderkey,
-	sum(l_extendedprice * (1 - l_discount)) as revenue,
-	o_orderdate,
-	o_shippriority
+	o_orderpriority,
+	count(*) as order_count
 from
-	customer,
-	orders,
-	lineitem
+	orders
 where
-	c_mktsegment = 'AUTOMOBILE'
-	and c_custkey = o_custkey
-	and l_orderkey = o_orderkey
-	and o_orderdate < date '1995-03-14'
-	and l_shipdate > date '1995-03-14'
+	o_orderdate >= date '1995-01-01'
+	and o_orderdate < date '1995-01-01' + interval '3' month
+	and exists (
+		select
+			*
+		from
+			lineitem
+		where
+			l_orderkey = o_orderkey
+			and l_commitdate < l_receiptdate
+	)
 group by
-	l_orderkey,
-	o_orderdate,
-	o_shippriority
+	o_orderpriority
 order by
-	revenue desc,
-	o_orderdate;
-where rownum <= 10;;
+	o_orderpriority;
+where rownum <= -1;

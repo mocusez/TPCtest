@@ -1,19 +1,18 @@
 select
-	s_suppkey,
-	s_name,
-	s_address,
-	s_phone,
-	total_revenue
+	sum(l_extendedprice) / 7.0 as avg_yearly
 from
-	supplier,
-	revenue0
+	lineitem,
+	part
 where
-	s_suppkey = supplier_no
-	and total_revenue = (
+	p_partkey = l_partkey
+	and p_brand = 'Brand#34'
+	and p_container = 'MED CASE'
+	and l_quantity < (
 		select
-			max(total_revenue)
+			0.2 * avg(l_quantity)
 		from
-			revenue0
-	)
-order by
-	s_suppkey;;
+			lineitem
+		where
+			l_partkey = p_partkey
+	);
+where rownum <= -1;

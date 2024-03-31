@@ -1,14 +1,22 @@
 select
-	100.00 * sum(case
-		when p_type like 'PROMO%'
-			then l_extendedprice * (1 - l_discount)
-		else 0
-	end) / sum(l_extendedprice * (1 - l_discount)) as promo_revenue
+	s_suppkey,
+	s_name,
+	s_address,
+	s_phone,
+	total_revenue
 from
-	lineitem,
-	part
+	supplier,
+	revenue0
 where
-	l_partkey = p_partkey
-	and l_shipdate >= date '1995-11-01'
-	and l_shipdate < date '1995-11-01' + interval '1' month;
-where rownum <= -1;;
+	s_suppkey = supplier_no
+	and total_revenue = (
+		select
+			max(total_revenue)
+		from
+			revenue0
+	)
+order by
+	s_suppkey;
+
+drop view revenue0;
+where rownum <= -1;

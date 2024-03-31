@@ -1,33 +1,40 @@
 select
-	c_name,
-	c_custkey,
-	o_orderkey,
-	o_orderdate,
-	o_totalprice,
-	sum(l_quantity)
+	s_name,
+	count(*) as numwait
 from
-	customer,
+	supplier,
+	lineitem l1,
 	orders,
-	lineitem
+	nation
 where
-	o_orderkey in (
+	s_suppkey = l1.l_suppkey
+	and o_orderkey = l1.l_orderkey
+	and o_orderstatus = 'F'
+	and l1.l_receiptdate > l1.l_commitdate
+	and exists (
 		select
-			l_orderkey
+			*
 		from
-			lineitem
-		group by
-			l_orderkey having
-				sum(l_quantity) > 314
+			lineitem l2
+		where
+			l2.l_orderkey = l1.l_orderkey
+			and l2.l_suppkey <> l1.l_suppkey
 	)
-	and c_custkey = o_custkey
-	and o_orderkey = l_orderkey
+	and not exists (
+		select
+			*
+		from
+			lineitem l3
+		where
+			l3.l_orderkey = l1.l_orderkey
+			and l3.l_suppkey <> l1.l_suppkey
+			and l3.l_receiptdate > l3.l_commitdate
+	)
+	and s_nationkey = n_nationkey
+	and n_name = 'INDIA'
 group by
-	c_name,
-	c_custkey,
-	o_orderkey,
-	o_orderdate,
-	o_totalprice
+	s_name
 order by
-	o_totalprice desc,
-	o_orderdate;
-where rownum <= 100;;
+	numwait desc,
+	s_name;
+where rownum <= 100;

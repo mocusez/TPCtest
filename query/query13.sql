@@ -1,29 +1,21 @@
 select
-	l_shipmode,
-	sum(case
-		when o_orderpriority = '1-URGENT'
-			or o_orderpriority = '2-HIGH'
-			then 1
-		else 0
-	end) as high_line_count,
-	sum(case
-		when o_orderpriority <> '1-URGENT'
-			and o_orderpriority <> '2-HIGH'
-			then 1
-		else 0
-	end) as low_line_count
+	c_count,
+	count(*) as custdist
 from
-	orders,
-	lineitem
-where
-	o_orderkey = l_orderkey
-	and l_shipmode in ('SHIP', 'REG AIR')
-	and l_commitdate < l_receiptdate
-	and l_shipdate < l_commitdate
-	and l_receiptdate >= date '1995-01-01'
-	and l_receiptdate < date '1995-01-01' + interval '1' year
+	(
+		select
+			c_custkey,
+			count(o_orderkey)
+		from
+			customer left outer join orders on
+				c_custkey = o_custkey
+				and o_comment not like '%special%accounts%'
+		group by
+			c_custkey
+	) as c_orders (c_custkey, c_count)
 group by
-	l_shipmode
+	c_count
 order by
-	l_shipmode;
-where rownum <= -1;;
+	custdist desc,
+	c_count desc;
+where rownum <= -1;

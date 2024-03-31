@@ -1,18 +1,38 @@
 select
-	sum(l_extendedprice) / 7.0 as avg_yearly
+	s_name,
+	s_address
 from
-	lineitem,
-	part
+	supplier,
+	nation
 where
-	p_partkey = l_partkey
-	and p_brand = 'Brand#34'
-	and p_container = 'MED CASE'
-	and l_quantity < (
+	s_suppkey in (
 		select
-			0.2 * avg(l_quantity)
+			ps_suppkey
 		from
-			lineitem
+			partsupp
 		where
-			l_partkey = p_partkey
-	);
-where rownum <= -1;;
+			ps_partkey in (
+				select
+					p_partkey
+				from
+					part
+				where
+					p_name like 'red%'
+			)
+			and ps_availqty > (
+				select
+					0.5 * sum(l_quantity)
+				from
+					lineitem
+				where
+					l_partkey = ps_partkey
+					and l_suppkey = ps_suppkey
+					and l_shipdate >= date '1994-01-01'
+					and l_shipdate < date '1994-01-01' + interval '1' year
+			)
+	)
+	and s_nationkey = n_nationkey
+	and n_name = 'JAPAN'
+order by
+	s_name;
+where rownum <= -1;
