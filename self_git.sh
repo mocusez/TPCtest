@@ -17,3 +17,8 @@ git commit -m "$1"
 if [ "$2" == "push" ]; then
     git push
 fi
+
+# 如果运行错误，提示正确参数信息
+if [ $? -ne 0 ]; then
+    echo "Usage: $0 <commit message> [push]"
+fi

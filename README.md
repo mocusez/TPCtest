@@ -69,6 +69,16 @@ cd TPCtest/TPC-H V3.0.1
 2. 存储数据部分
 3. 硬编码部分（sql计算部分）
 
+方法1：纯编码：
+目前完成q1测试：
+q1.cpp --> q1.out
 
+
+方法二：面向对象 
+
+class Database
+class Table
+class Tuble
+class Query
 
 
