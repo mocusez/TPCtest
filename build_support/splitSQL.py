@@ -16,7 +16,7 @@ def split_sql_file(input_file, output_dir):
     for i, query in enumerate(queries, start=1):
         output_file_path = os.path.join(output_dir, f'query{i}.sql')
         with open(output_file_path, 'w') as output_file:
-            output_file.write(query)  # 在文件末尾添加分号
+            output_file.write(query)  
 
         print(f'Query {i} saved to {output_file_path}')
 

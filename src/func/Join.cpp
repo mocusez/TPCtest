@@ -46,7 +46,8 @@ Join::~Join() {
     if (file2.is_open()) {
         file2.close();
     }
-}   // Path: src/Join.h
+}
 
 
 // hash-join
+// ------
