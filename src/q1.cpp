@@ -2,7 +2,7 @@
 #include <vector>
 #include <map>
 #include <tuple>
-#include "Structs.h"
+#include "func/Structs.h"
 #include <iomanip>  // 需要包含这个头文件来使用 std::setprecision 和 std::fixed
 
 #include <fstream>
@@ -11,17 +11,17 @@
 
 std::vector<LineItem> loadData() {
     std::vector<LineItem> data;
-    std::ifstream file("../data/lineitem.tbl"); // Open the file
+    std::ifstream file("../data/lineitem.tbl"); 
     std::string line;
 
-    while (std::getline(file, line)) { // Read each line from the file
-        std::stringstream linestream(line); // Use stringstream to parse the line
+    while (std::getline(file, line)) { 
+        std::stringstream linestream(line); 
         LineItem item;
         std::string value;
 
-        // Parse each field from the line
-        std::getline(linestream, value, '|'); // Skip fields if necessary
-        std::getline(linestream, value, '|'); // Continue skipping or parsing as needed
+
+        std::getline(linestream, value, '|'); 
+        std::getline(linestream, value, '|'); 
         std::getline(linestream, value, '|');
         std::getline(linestream, value, '|');
         std::getline(linestream, value, '|');
@@ -35,7 +35,6 @@ std::vector<LineItem> loadData() {
         std::getline(linestream, item.l_returnflag, '|');
         std::getline(linestream, item.l_linestatus, '|');
         std::getline(linestream, item.l_shipdate, '|');
-        // You can continue parsing remaining fields as needed
 
         data.push_back(item);
     }
