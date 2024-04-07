@@ -70,11 +70,6 @@ public:
                     i = 0;
                     row.push_back(t);
                 }
-                // 处理每个分割的字符串，将其转换为T类型，并添加到当前行
-                // if (!value.empty()) {
-                //     row.push_back(convertToT<T>(value));
-
-                // }
             }
 
             // 将这一行数据添加到data中
