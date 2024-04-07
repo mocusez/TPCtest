@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "Structs.h"
 
 /*
  * Table.h
@@ -16,18 +17,44 @@
 */
 
 
+
+
+
+
 // 定义一个模板类Table，用于存储数据
 template<typename T>
 class Table {
 private:
-    std::vector<std::vector<T>> data; // 二维数组来存储数据
+    std::vector<T> data; // 用于存储数据
     std::vector<std::string> columnNames; // 存储列名
 
 public:
-    Table();
-    void importData(const std::string& path);
-    void addRow(const std::vector<T>& row);
-    void setColumnNames(const std::vector<std::string>& names);
-    const std::vector<std::vector<T>>& getData() const;
-    const std::vector<std::string>& getColumnNames() const;
+    Table() {}
+
+    void importData(const std::string& path) {
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            std::cerr << "无法打开文件：" << path << std::endl;
+            return;
+        }
+
+        std::string line;
+        while (getline(file, line)) {
+            T t = convertToT<T>(line);
+            data.push_back(t);
+        }
+        file.close();
+    }
+
+    void setColumnNames(const std::vector<std::string>& names) {
+        columnNames = names;
+    }
+
+    const std::vector<T>& getData() const {
+        return data;
+    }
+
+    const std::vector<std::string>& getColumnNames() const {
+        return columnNames;
+    }
 };

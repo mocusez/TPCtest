@@ -29,4 +29,12 @@ struct Nation {
 template<typename T>
 T convertToT(const std::string& value);
 
+// // 特化模板函数为 MyStruct 类型的实现
+template<>
+MyStruct convertToT<MyStruct>(const std::string& value);
+
+// // 特化模板函数为 Nation 类型的实现
+template<>
+Nation convertToT<Nation>(const std::string& value);
+
 #endif // STRUCTS_H
