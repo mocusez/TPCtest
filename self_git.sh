@@ -8,6 +8,7 @@ git add query
 # 代码部分
 git add src
 git add temp
+git add temp1
 
 # 其他部分
 git add self_git.sh
