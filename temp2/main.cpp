@@ -48,7 +48,6 @@ void myTest2() {
     
 }
 
-
 void myTest3() {
     std::string row = "20|alan|";
     MyStruct ms = convertToT<MyStruct>(row);

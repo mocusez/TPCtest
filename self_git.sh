@@ -11,6 +11,7 @@ git add temp
 git add temp2
 
 # 其他部分
+git add help
 git add self_git.sh
 git add README.md
 
