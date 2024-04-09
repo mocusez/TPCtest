@@ -23,6 +23,7 @@ void myTest1() {
     
 }
 
+//nationTable
 void myTest2() {
     // 使用Nation作为模板参数来创建Table类的实例
     Table<Nation> nationTable;
@@ -56,17 +57,58 @@ void myTest3() {
     std::string row2 = "0|ALGERIA|0| haggle. carefully final deposits detect slyly agai|";
     Nation n = convertToT<Nation>(row2);
     std::cout << n.N_NATIONKEY << "\t" << n.N_NAME << "\t" << n.N_REGIONKEY << "\t" << n.N_COMMENT << std::endl;
-
-
 }
 
+//CustomerTable
+void myTest4() {
+    // 使用MyStruct作为模板参数来创建Table类的实例
+    Table<Customer> CustomerTable;
+    // 添加列名
+    CustomerTable.setColumnNames({"C_CUSTKEY", "C_NAME", "C_ADDRESS", "C_NATIONKEY", "C_PHONE", "C_ACCTBAL", "C_MKTSEGMENT", "C_COMMENT"});
+    // 导入数据
+    CustomerTable.importData("customer.tbl");
+    // 获取数据
+    const auto& data = CustomerTable.getData();
+    const auto& columnNames = CustomerTable.getColumnNames();
+    // 输出列名
+    for (const auto& columnName : columnNames) {
+        std::cout << columnName << "\t";
+    }
+    std::cout << std::endl;
+    // 输出数据
+    for (const auto& row : data) {
+        std::cout << row.C_CUSTKEY << "\t" << row.C_NAME << "\t" << row.C_ADDRESS << "\t" << row.C_NATIONKEY << "\t" << row.C_PHONE << "\t" << row.C_ACCTBAL << "\t" << row.C_MKTSEGMENT << "\t" << row.C_COMMENT << std::endl;
+    }
+}
+
+//Index 测试
+// void myTest5() {
+
+//     Table<Nation> nationTable;
+//     nationTable.setColumnNames({"N_NATIONKEY", "N_NAME", "N_REGIONKEY", "N_COMMENT"});
+//     nationTable.importData("nation.tbl");
+//     const auto& data = nationTable.getData();
+//     const auto& columnNames = nationTable.getColumnNames();
+
+//     std::unordered_map<int, Nation> dataMap;
+//     std::unordered_map<int, int> buildIndex('N_NATIONKEY');
+//     for (int i = 0; i < buildIndex.size(); i++) {
+//         std::cout << dataMap.key_eq(i) << endl;
+//     }
+
+
+// }
 
 int main() {
     myTest1();
     std::cout << "----------------" << std::endl;
-    myTest2();
-     std::cout << "----------------" << std::endl;
-    myTest3();
+    // myTest2();
+    std::cout << "----------------" << std::endl;
+    // myTest3();
+    std::cout << "----------------" << std::endl;
+    // myTest4();
+    std::cout << "----------------" << std::endl;
+    // myTest5();
 
     return 0;
 }

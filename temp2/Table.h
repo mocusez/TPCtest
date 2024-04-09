@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include "Structs.h"
-
+#include <unordered_map>
 /*
  * Table.h
  * 定义一个模板类Table，用于存储数据
@@ -75,7 +75,6 @@ public:
     }
 
     // 次键索引
-    template<typename T>
     std::unordered_map<int, int> buildIndex(const std::string& columnName) {
         std::unordered_map<int, int> indexMap;
         for (int i = 0; i < data.size(); i++) {
