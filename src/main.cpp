@@ -46,7 +46,6 @@ void myTest2() {
     for (const auto& row : data) {
         std::cout << row.N_NATIONKEY << "\t" << row.N_NAME << "\t" << row.N_REGIONKEY << "\t" << row.N_COMMENT << std::endl;
     }
-    
 }
 
 void myTest3() {
@@ -102,11 +101,11 @@ void myTest4() {
 int main() {
     myTest1();
     std::cout << "----------------" << std::endl;
-    // myTest2();
+    myTest2();
     std::cout << "----------------" << std::endl;
-    // myTest3();
+    myTest3();
     std::cout << "----------------" << std::endl;
-    // myTest4();
+    myTest4();
     std::cout << "----------------" << std::endl;
     // myTest5();
 
